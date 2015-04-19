@@ -48,11 +48,7 @@ end
 
 class Adventure
   def start
-    
-    
-    loop rand(10)
-    Path.new
-    
+      
     
   end
   
