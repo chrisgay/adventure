@@ -13,14 +13,15 @@ end
 
 class Hero < Person
 
-  def move
-  end
-
   def power
   end
 
   def heal
   end
+  
+  def status
+    puts "#{name} has #{health} health, #{strength} strength and #{weapon} weapons" 
+  end  
 
 end
 
@@ -58,13 +59,13 @@ class Adventure
   def start
     @patharray = []
     pathname = ["Elm Street", "Crystal Lake", "Amityville", "Haddonfield", "Sunset Blvd", "Mulholland Drive", "34th St", "Bates Motel", "Transylvania", "Hogwarts", "Southpark" ]
-    rand(1..5).times do |i|
+    rand(2..5).times do |i|
       @patharray << Path.new(pathname[rand(10)])
       @count = i
     end
+    @patharray = @patharray.reverse
     
   end
-  
   
 end
 
@@ -76,26 +77,48 @@ def battle(hero, enemy)
   puts "Your health is #{hero.health}, and the enemy has health of #{enemy.health}"
 end
 
+def cycleprint(object)
+  i = 1
+  while object.count >= 0
+    puts "#{i} ) " + object.patharray[object.count].name # remember to designate array field to display or else function will return objectID
+    i += 1
+    object.count -= 1
+  end
+end
+
+def move(object)
+  puts "Pick Your Path Number:"
+  selection = object.count - gets.to_i
+  puts "You have selected #{object[selection].name}"
+  puts "You have discovered #{object[selection].enemy_num} enemy and #{object[selection].weapon_num} weapons and #{object[selection].health_num} health"
+end  
+
+
 game = Adventure.new # instantiate a new Adventure 
 game.start # create an Array of paths
 
 enemy = Enemy.new("Dracula", 10, 10, 10) # create a new enemy
-hero = Hero.new("Mario", 100, 10, 10) # create a new hero
+
 
 
 # Introduce Game
-
+puts ""
+puts ""
+puts "Welcome to the Choose Your Own Adventure Game"
+puts " --------------------------------------------"
+puts "Enter Name of our Hero to Begin:" 
+heroname = gets.chomp
+hero = Hero.new(heroname, 100, 10, 10) # create a new hero
+puts " --------------------------------------------"
+puts "Our hero #{hero.name} has been created."
+hero.status
+puts " --------------------------------------------"
 puts "There are #{game.count + 1} paths in your adventure"
 
-while game.count >= 0 
-  puts game.patharray[game.count].name # remember to designate array field to display or else function will return objectID
-  game.count -= 1
-end
+cycleprint(game) 
+puts " --------------------------------------------"
 
 # Game Play
 
+move(game.patharray)
 battle(hero, enemy)
-
-
-
-
